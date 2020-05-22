@@ -1,22 +1,25 @@
 document.addEventListener("DOMContentLoaded", () => {
   const initState = new Init();
-  new AddEventListeners(initState);
+  const form = new Form(initState)
+ 
 });
 
 class Init {
   constructor() {
     this.form = document.querySelector(".form");
     this.submitBtn = form.querySelector(".btn");
+    this.phoneInput = form.querySelector('#phone')
     this.registerEmailSwitch = form.querySelectorAll(".form__span")[0];
     this.registerPhoneSwitch = form.querySelectorAll(".form__span")[1];
   }
 }
 
-class AddEventListeners {
-  constructor({ submitBtn, registerEmailSwitch, registerPhoneSwitch }) {
+class Form {
+  constructor({ submitBtn, registerEmailSwitch, registerPhoneSwitch, phoneInput}) {
     submitBtn.addEventListener("click", this.handleSubmit);
     registerEmailSwitch.addEventListener("click", this.changeRegisterToEmail);
     registerPhoneSwitch.addEventListener("click", this.changeRegisterToPhone);
+    phoneInput.addEventListener("input" , this.hanldePhoneInputChange)
   }
 
   handleSubmit = (e) => {
@@ -44,7 +47,9 @@ class AddEventListeners {
     if (Object.keys(errorObject).length !== 0) {
       this.fillErrorSpanElements(errorObject);
       return;
-    }
+    } 
+
+    window.alert('Prosao bez errora :D')
   };
 
   fillErrorSpanElements = (errorObject) => {
@@ -60,6 +65,13 @@ class AddEventListeners {
     });
   };
 
+  hanldePhoneInputChange = (e) => {
+    
+  e.target.value = e.target.value.replace(/[^\dA-Z]/g, '').replace(/(.{3})/g, '$1 ').trim();
+     
+  }
+
+ 
   changeRegisterToPhone = () => {
     const formInputPhone = document.querySelectorAll(".form__input-group")[1];
     const activeClass = "form__input-group--active";
@@ -133,10 +145,20 @@ class User {
     if (this.terms === null) {
       errorMsgs.terms = "Please agree with our terms and policy";
     }
+  
+    
+    if (typeof this.phone === "string" && !this.phone.trim()) {
+      errorMsgs.phone = "Phone field empty, please enter yout phone number";
+    }
+
+    if ((typeof this.phone === "string") && (this.phone.split('').length < 11 || this.phone.split('').length > 13 )) {
+      errorMsgs.phone = "Invalid number length, try again";
+    }
+
 
     if (typeof this.email === "string" && !this.email.trim()) {
       errorMsgs.email = "Email field empty, please enter yout Email";
-    }
+    } 
 
     if (this.email) {
       const pattern = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
