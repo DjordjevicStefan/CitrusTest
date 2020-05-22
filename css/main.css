@@ -1,0 +1,36 @@
+html {
+  box-sizing: border-box;
+  font-size: 62.5%; }
+
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit; }
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Ubuntu', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale; }
+
+.form-container {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50rem;
+  height: 70rem; }
+
+.form {
+  outline: 1px solid red; }
+  .form__select {
+    display: flex;
+    justify-content: space-evenly; }
+  .form__input-group {
+    display: none;
+    margin: 0 auto; }
+    .form__input-group--active {
+      display: block; }

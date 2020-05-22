@@ -1,0 +1,28 @@
+.form-container {
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50rem;
+    height: 70rem;
+}
+
+.form {
+   outline: 1px solid red;
+  
+
+   &__select {
+     display: flex;
+     justify-content: space-evenly;
+   }
+
+
+   &__input-group {
+        display: none;
+        margin: 0 auto;
+
+       &--active {
+          display: block;
+       } 
+   }
+}
