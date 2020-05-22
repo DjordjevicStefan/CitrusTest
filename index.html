@@ -22,11 +22,13 @@
 
         <div class="form__input-group form__input-group--active">
           <label class="form__label" for="email">Your Email: </label>
-          <input type="email" id="email" class="form__input" />
+          <input type="email" name="email" id="email" class="form__input" />
+          <span data-name="email" class="form__error-span">test</span>
         </div>
         <div class="form__input-group">
           <label class="form__label" for="phone">Your Phone Number</label>
-          <input type="number" id="phone" class="form__input"/>
+          <input type="text" name="phone" id="phone" class="form__input"/>
+          <span data-name="number" class="form__error-span">test</span>
         </div>
 
         <fieldset class="form__radio-group">
@@ -53,11 +55,13 @@
             value="eur"
           />
           <label class="form__radio-label" for="eur">EUR</label>
+          <span data-name="currency" class="form__error-span">test</span>
         </fieldset>
 
         <div class="form__checkbox-group">
-          <input type="checkbox" id="terms" name="terms" value="test" />
+          <input type="checkbox" id="terms" name="terms" value="terms" />
           <label for="terms">I agree to the Terms and Conditions provided</label>
+          <span data-name="terms" class="form__error-span">test</span>
         </div>
         <button class="btn" type="submit">Submit</button>
       </form>

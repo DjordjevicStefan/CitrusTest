@@ -10,7 +10,7 @@
 .form {
    outline: 1px solid red;
   
-
+   
    &__select {
      display: flex;
      justify-content: space-evenly;
@@ -24,5 +24,14 @@
        &--active {
           display: block;
        } 
+   }
+
+   &__error-span {
+      display: block;
+      color: red ;
+   } 
+
+   &__span {
+      cursor: pointer;
    }
 }

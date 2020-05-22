@@ -34,3 +34,8 @@ body {
     margin: 0 auto; }
     .form__input-group--active {
       display: block; }
+  .form__error-span {
+    display: block;
+    color: red; }
+  .form__span {
+    cursor: pointer; }

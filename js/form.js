@@ -1,60 +1,153 @@
-document.addEventListener('DOMContentLoaded', ()=> {
-  const initState = new Init()
-  new AddEventListeners(initState)
-} );
-
+document.addEventListener("DOMContentLoaded", () => {
+  const initState = new Init();
+  new AddEventListeners(initState);
+});
 
 class Init {
   constructor() {
-     this.form = document.querySelector('.form') ;
-     this.submitBtn = form.querySelector('.btn') ;
-     this.registerEmailSwitch = form.querySelectorAll('.form__span')[0] ;
-     this.registerPhoneSwitch = form.querySelectorAll('.form__span')[1] ;
-
+    this.form = document.querySelector(".form");
+    this.submitBtn = form.querySelector(".btn");
+    this.registerEmailSwitch = form.querySelectorAll(".form__span")[0];
+    this.registerPhoneSwitch = form.querySelectorAll(".form__span")[1];
   }
 }
 
-class AddEventListeners{
-      constructor({submitBtn, registerEmailSwitch, registerPhoneSwitch}) {
-          submitBtn.addEventListener('click' , this.handleSubmit ) ;
-          registerEmailSwitch.addEventListener('click', this.changeRegisterToEmail);
-          registerPhoneSwitch.addEventListener('click' , this.changeRegisterToPhone);
+class AddEventListeners {
+  constructor({ submitBtn, registerEmailSwitch, registerPhoneSwitch }) {
+    submitBtn.addEventListener("click", this.handleSubmit);
+    registerEmailSwitch.addEventListener("click", this.changeRegisterToEmail);
+    registerPhoneSwitch.addEventListener("click", this.changeRegisterToPhone);
+  }
+
+  handleSubmit = (e) => {
+    e.preventDefault();
+
+    const inputFormValues = {};
+
+    inputFormValues.currency = this.getRadioInputValue();
+    inputFormValues.terms = this.getCheckboxInputValue();
+
+    const fromInputs = document.querySelectorAll(".form__input");
+    const parentActiveClass = "form__input-group--active";
+    fromInputs.forEach((input) => {
+      const parentClassListArray = [...input.parentElement.classList];
+      if (parentClassListArray.includes(parentActiveClass)) {
+        const inputName = input.getAttribute("name");
+        const inputValue = input.value;
+        inputFormValues[inputName] = inputValue;
       }
-        
+    });
 
+    const user = new User(inputFormValues);
+    const errorObject = user.validation();
+    console.log("error obj", errorObject);
+    if (Object.keys(errorObject).length !== 0) {
+      this.fillErrorSpanElements(errorObject);
+      return;
+    }
+  };
 
-      handleSubmit = (e) => {
-         e.preventDefault();
-         console.log('submit submit')
+  fillErrorSpanElements = (errorObject) => {
+    const errorSpans = [...document.querySelectorAll(".form__error-span")];
+    errorSpans.forEach((span) => {
+      span.textContent = "test";
+    });
+    //  const objectKeys = Object.keys(errorObject);
+    errorSpans.forEach((span) => {
+      if (errorObject[span.dataset.name]) {
+        span.textContent = errorObject[span.dataset.name];
       }
+    });
+  };
 
-      changeRegisterToPhone = (e) => {
-        const formInputPhone = document.querySelectorAll('.form__input-group')[1] ;
-        const activeClass = 'form__input-group--active'
-        formInputPhone.classList.add(activeClass)
-        formInputPhone.previousElementSibling.classList.remove(activeClass)
-        
-      }
+  changeRegisterToPhone = () => {
+    const formInputPhone = document.querySelectorAll(".form__input-group")[1];
+    const activeClass = "form__input-group--active";
+    Helpers.addClassAndRemoveSiblingClassFromElement(
+      formInputPhone,
+      activeClass,
+      "previous"
+    );
+  };
 
-      changeRegisterToEmail = (e) => {
-        const formInputPhone = document.querySelectorAll('.form__input-group')[0] ;
-        const activeClass = 'form__input-group--active'
-        formInputPhone.classList.add(activeClass)
-        formInputPhone.nextElementSibling.classList.remove(activeClass)
+  changeRegisterToEmail = () => {
+    const formInputPhone = document.querySelectorAll(".form__input-group")[0];
+    const activeClass = "form__input-group--active";
+    Helpers.addClassAndRemoveSiblingClassFromElement(
+      formInputPhone,
+      activeClass,
+      "next"
+    );
+  };
 
-        this.getCheckboxInputValue()
-      }
-    
-      //// Da li ove dve helper methode staviti u posebnu klasu 
-      getRadioInputValue = () => {
-        return document.querySelector(`input[name='currency']:checked`).value ; 
-        // document.querySelector('input[name="currency"]:checked').value 
-      }
+  //// Da li ove dve helper methode staviti u posebnu klasu
+  getRadioInputValue = () => {
+    return Helpers.getCheckedValueByInputName("currency");
+  };
 
-      getCheckboxInputValue = () => {
-        return document.querySelector(`input[name='terms']:checked`).value ; 
-        // document.querySelector('input[name="currency"]:checked').value 
-      }
-
+  getCheckboxInputValue = () => {
+    return Helpers.getCheckedValueByInputName("terms");
+  };
 }
+
+class Helpers {
+  static addClassAndRemoveSiblingClassFromElement = (
+    element,
+    className,
+    siblingPosition
+  ) => {
+    element.classList.add(className);
+    if (siblingPosition === "next") {
+      element.nextElementSibling.classList.remove(className);
+      return;
+    }
+    element.previousElementSibling.classList.remove(className);
+  };
+
+  static getCheckedValueByInputName = (name) => {
+    let selectedElement = document.querySelector(
+      `input[name='${name}']:checked`
+    );
+    if (selectedElement === null) {
+      return null;
+    }
+    return selectedElement.value;
+  };
+}
+
+class User {
+  constructor({ email = null, phone = null, currency, terms }) {
+    this.email = email;
+    this.phone = phone;
+    this.currency = currency;
+    this.terms = terms;
+  }
+
+  validation = () => {
+    const errorMsgs = {};
+
+    if (this.currency === null) {
+      errorMsgs.currency = "Currency must be selected";
+    }
+
+    if (this.terms === null) {
+      errorMsgs.terms = "Please agree with our terms and policy";
+    }
+
+    if (typeof this.email === "string" && !this.email.trim()) {
+      errorMsgs.email = "Email field empty, please enter yout Email";
+    }
+
+    if (this.email) {
+      const pattern = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
+
+      if (!pattern.test(this.email)) {
+        errorMsgs.email = "Please enter a valid Email";
+      }
+    }
+
+    return errorMsgs;
+  };
+}
+
 
