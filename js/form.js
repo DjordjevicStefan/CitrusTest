@@ -1,28 +1,32 @@
 document.addEventListener("DOMContentLoaded", () => {
   const initState = new Init();
-  const form = new Form(initState)
- 
+  const form = new Form(initState);
 });
 
 class Init {
   constructor() {
     this.form = document.querySelector(".form");
     this.submitBtn = form.querySelector(".btn");
-    this.phoneInput = form.querySelector('#phone')
+    this.phoneInput = form.querySelector("#phone");
     this.registerEmailSwitch = form.querySelectorAll(".form__span")[0];
     this.registerPhoneSwitch = form.querySelectorAll(".form__span")[1];
   }
 }
 
 class Form {
-  constructor({ submitBtn, registerEmailSwitch, registerPhoneSwitch, phoneInput}) {
+  constructor({
+    submitBtn,
+    registerEmailSwitch,
+    registerPhoneSwitch,
+    phoneInput,
+  }) {
     submitBtn.addEventListener("click", this.handleSubmit);
     registerEmailSwitch.addEventListener("click", this.changeRegisterToEmail);
     registerPhoneSwitch.addEventListener("click", this.changeRegisterToPhone);
-    phoneInput.addEventListener("input" , this.hanldePhoneInputChange)
+    phoneInput.addEventListener("input", this.hanldePhoneInputChange);
   }
 
-  handleSubmit = (e) => {
+  handleSubmit = async (e) => {
     e.preventDefault();
 
     const inputFormValues = {};
@@ -33,7 +37,9 @@ class Form {
     const fromInputs = document.querySelectorAll(".form__input");
     const parentActiveClass = "form__input-box--active";
     fromInputs.forEach((input) => {
-      const parentClassListArray = [...input.parentElement.parentElement.classList];
+      const parentClassListArray = [
+        ...input.parentElement.parentElement.classList,
+      ];
       if (parentClassListArray.includes(parentActiveClass)) {
         const inputName = input.getAttribute("name");
         const inputValue = input.value;
@@ -43,13 +49,26 @@ class Form {
 
     const user = new User(inputFormValues);
     const errorObject = user.validation();
-    console.log("error obj", errorObject);
+
     if (Object.keys(errorObject).length !== 0) {
       this.fillErrorSpanElements(errorObject);
       return;
-    } 
+    }
 
-    window.alert('Prosao bez errora :D')
+    let spinner = document.querySelector(".spinner");
+    spinner.classList.add("spinner__active");
+
+    const xml = new XMLRequest(user);
+    let response = await xml.sendFakeRequest("ok").catch((error) => {
+      spinner.classList.remove("spinner__active");
+      modal.addHeaderAndParagText("Register error!", "Please try again!");
+      modal.showModal();
+    });
+    if (response) {
+      spinner.classList.remove("spinner__active");
+      modal.addHeaderAndParagText("Success!", "Please proceed to login!");
+      modal.showModal();
+    }
   };
 
   fillErrorSpanElements = (errorObject) => {
@@ -66,22 +85,21 @@ class Form {
   };
 
   hanldePhoneInputChange = (e) => {
-    
-  e.target.value = e.target.value.replace(/[^\dA-Z]/g, '').replace(/(.{3})/g, '$1 ').trim();
-     
-  }
+    e.target.value = e.target.value
+      .replace(/[^\dA-Z]/g, "")
+      .replace(/(.{3})/g, "$1 ")
+      .trim();
+  };
 
- 
   changeRegisterToPhone = (e) => {
-    const activeClassSpan = 'form__span-active';
-    const formInputSpanPhone = e.target ;
-    formInputSpanPhone.classList.add(activeClassSpan) ;
+    const activeClassSpan = "form__span-active";
+    const formInputSpanPhone = e.target;
+    formInputSpanPhone.classList.add(activeClassSpan);
     Helpers.addClassAndRemoveSiblingClassFromElement(
       formInputSpanPhone,
       activeClassSpan,
       "previous"
     );
-
 
     const formInputPhone = document.querySelectorAll(".form__input-box")[1];
     const activeClass = "form__input-box--active";
@@ -93,16 +111,15 @@ class Form {
   };
 
   changeRegisterToEmail = (e) => {
-    const activeClassSpan = 'form__span-active';
-    const formInputSpanEmail = e.target ;
-    formInputSpanEmail.classList.add(activeClassSpan) ;
+    const activeClassSpan = "form__span-active";
+    const formInputSpanEmail = e.target;
+    formInputSpanEmail.classList.add(activeClassSpan);
     // const formSpanEma = document.querySelectorAll(".form__span")[0];
     Helpers.addClassAndRemoveSiblingClassFromElement(
       formInputSpanEmail,
       activeClassSpan,
       "next"
     );
-
 
     const formInputEmail = document.querySelectorAll(".form__input-box")[0];
     const activeClass = "form__input-box--active";
@@ -166,20 +183,21 @@ class User {
     if (this.terms === null) {
       errorMsgs.terms = "Please agree with our terms and policy";
     }
-  
-    
+
     if (typeof this.phone === "string" && !this.phone.trim()) {
-      errorMsgs.phone = "Phone field empty, please enter yout phone number";
+      errorMsgs.phone = "Phone field empty, please enter your phone number";
     }
 
-    if ((typeof this.phone === "string") && (this.phone.split('').length < 11 || this.phone.split('').length > 13 )) {
+    if (
+      typeof this.phone === "string" &&
+      (this.phone.split("").length < 11 || this.phone.split("").length > 13)
+    ) {
       errorMsgs.phone = "Invalid number length, try again";
     }
 
-
     if (typeof this.email === "string" && !this.email.trim()) {
       errorMsgs.email = "Email field empty, please enter yout Email";
-    } 
+    }
 
     if (this.email) {
       const pattern = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
@@ -193,4 +211,21 @@ class User {
   };
 }
 
+//// Fake backend api :)
+class XMLRequest {
+  constructor(data) {
+    this.data = data;
+  }
 
+  sendFakeRequest = (option) => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        if (option === "ok") {
+          resolve({ statusCode: 200 });
+        } else {
+          reject(new Error("Error!"));
+        }
+      }, 2500);
+    });
+  };
+}

@@ -1,0 +1,55 @@
+.spinner{
+  display: none !important;
+  background-color: #8ac0649a;
+  position: fixed;
+  z-index: 400;
+  height: 100%;
+  width: 100%;
+ 
+
+  &__active {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__box {
+    width: 6rem;
+    height: 6rem;
+    position: relative;
+    animation: sk-chase 2.5s infinite linear both;
+  }
+
+  &__dot {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0; 
+    animation: sk-chase-dot 2.0s infinite ease-in-out both; 
+
+    &:before {
+      content: '';
+      display: block;
+      width: 25%;
+      height: 25%;
+      background-color: $grey-dark;
+      border-radius: 100%;
+      animation: sk-chase-dot-before 2.0s infinite ease-in-out both; 
+    }
+  }
+}
+
+
+.spinner__dot:nth-child(1) { animation-delay: -1.1s; }
+.spinner__dot:nth-child(2) { animation-delay: -1.0s; }
+.spinner__dot:nth-child(3) { animation-delay: -0.9s; }
+.spinner__dot:nth-child(4) { animation-delay: -0.8s; }
+.spinner__dot:nth-child(5) { animation-delay: -0.7s; }
+.spinner__dot:nth-child(6) { animation-delay: -0.6s; }
+.spinner__dot:nth-child(1):before { animation-delay: -1.1s; }
+.spinner__dot:nth-child(2):before { animation-delay: -1.0s; }
+.spinner__dot:nth-child(3):before { animation-delay: -0.9s; }
+.spinner__dot:nth-child(4):before { animation-delay: -0.8s; }
+.spinner__dot:nth-child(5):before { animation-delay: -0.7s; }
+.spinner__dot:nth-child(6):before { animation-delay: -0.6s; }
