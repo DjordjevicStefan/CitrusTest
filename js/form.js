@@ -31,9 +31,9 @@ class Form {
     inputFormValues.terms = this.getCheckboxInputValue();
 
     const fromInputs = document.querySelectorAll(".form__input");
-    const parentActiveClass = "form__input-group--active";
+    const parentActiveClass = "form__input-box--active";
     fromInputs.forEach((input) => {
-      const parentClassListArray = [...input.parentElement.classList];
+      const parentClassListArray = [...input.parentElement.parentElement.classList];
       if (parentClassListArray.includes(parentActiveClass)) {
         const inputName = input.getAttribute("name");
         const inputValue = input.value;
@@ -55,7 +55,7 @@ class Form {
   fillErrorSpanElements = (errorObject) => {
     const errorSpans = [...document.querySelectorAll(".form__error-span")];
     errorSpans.forEach((span) => {
-      span.textContent = "test";
+      span.textContent = "";
     });
     //  const objectKeys = Object.keys(errorObject);
     errorSpans.forEach((span) => {
@@ -72,9 +72,19 @@ class Form {
   }
 
  
-  changeRegisterToPhone = () => {
-    const formInputPhone = document.querySelectorAll(".form__input-group")[1];
-    const activeClass = "form__input-group--active";
+  changeRegisterToPhone = (e) => {
+    const activeClassSpan = 'form__span-active';
+    const formInputSpanPhone = e.target ;
+    formInputSpanPhone.classList.add(activeClassSpan) ;
+    Helpers.addClassAndRemoveSiblingClassFromElement(
+      formInputSpanPhone,
+      activeClassSpan,
+      "previous"
+    );
+
+
+    const formInputPhone = document.querySelectorAll(".form__input-box")[1];
+    const activeClass = "form__input-box--active";
     Helpers.addClassAndRemoveSiblingClassFromElement(
       formInputPhone,
       activeClass,
@@ -82,11 +92,22 @@ class Form {
     );
   };
 
-  changeRegisterToEmail = () => {
-    const formInputPhone = document.querySelectorAll(".form__input-group")[0];
-    const activeClass = "form__input-group--active";
+  changeRegisterToEmail = (e) => {
+    const activeClassSpan = 'form__span-active';
+    const formInputSpanEmail = e.target ;
+    formInputSpanEmail.classList.add(activeClassSpan) ;
+    // const formSpanEma = document.querySelectorAll(".form__span")[0];
     Helpers.addClassAndRemoveSiblingClassFromElement(
-      formInputPhone,
+      formInputSpanEmail,
+      activeClassSpan,
+      "next"
+    );
+
+
+    const formInputEmail = document.querySelectorAll(".form__input-box")[0];
+    const activeClass = "form__input-box--active";
+    Helpers.addClassAndRemoveSiblingClassFromElement(
+      formInputEmail,
       activeClass,
       "next"
     );

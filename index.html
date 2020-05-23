@@ -7,6 +7,11 @@
     <link
       href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;700&display=swap"
       rel="stylesheet"
+    /> 
+
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
     />
 
     <link rel="stylesheet" href="css/main.css" />
@@ -15,55 +20,85 @@
   <body>
     <div class="form-container">
       <form class="form" id="form">
-        <div class="form__select">
-          <span class="form__span"> Register with Email </span>
-          <span class="form__span"> Register with Phone Number </span>
+        <div class="form__select u-margin-bottom">
+          <span  class="form__span"> Register with Email </span>
+          <span  class="form__span"> Register with Phone Number </span>
         </div>
 
-        <div class="form__input-group form__input-group--active">
-          <label class="form__label" for="email">Your Email: </label>
-          <input type="email" name="email" id="email" class="form__input" />
-          <span data-name="email" class="form__error-span">test</span>
+        <div class="form__input-box form__input-box--active">
+          <div class="form__input-group">
+            <label class="form__input-label" for="email"> <i class="far fa-envelope"></i> </label>
+            <input placeholder="Your Email" type="email" name="email" id="email" class="form__input" /> 
+          </div>
+          <span data-name="email" class="form__error-span u-text-shadow"></span>
         </div>
-        <div class="form__input-group">
-          <label class="form__label" for="phone">Your Phone Number</label>
-          <input type="tel" name="phone" id="phone" class="form__input"/>
-          <span data-name="phone" class="form__error-span">test</span>
+        
+        <div class="form__input-box">
+          <div class="form__input-group">
+            <label class="form__input-label" for="phone"><i class="fas fa-phone"></i></label>
+            <input placeholder="Your Phone Number"  type="tel" name="phone" id="phone" class="form__input"/>
+          </div>
+          <span data-name="phone" class="form__error-span u-text-shadow"></span>
         </div>
+        
 
-        <fieldset class="form__radio-group">
+        <fieldset class="form__radio-fieldset u-margin-top">
           <legend class="form__radio-legend">Select currency</legend>
-
+          <div class="form__radio-group"> 
           <input
             class="form__radio-input"
             type="radio"
             name="currency"
+            id="rsd"
             value="rsd"
           />
-          <label class="form__radio-label" for="rsd">RSD</label>
+          <label class="form__radio-label" for="rsd">
+            <span class="form__radio-button"></span>
+            RSD
+          </label>
+          </div>
+          <div class="form__radio-group">
           <input
             class="form__radio-input"
             type="radio"
             name="currency"
+            id="usd"
             value="usd"
           />
-          <label class="form__radio-label" for="usd">USD</label>
+          <label class="form__radio-label" for="usd">
+            <span class="form__radio-button"></span>
+            USD
+          </label>
+          </div>
+          <div class="form__radio-group">
           <input
             class="form__radio-input"
             type="radio"
             name="currency"
+            id="eur"
             value="eur"
           />
-          <label class="form__radio-label" for="eur">EUR</label>
-          <span data-name="currency" class="form__error-span">test</span>
+          <label class="form__radio-label" for="eur">
+            <span class="form__radio-button"></span>
+            EUR
+          </label>
+         </div>
+
+
+
+         <span data-name="currency" class="form__error-span u-text-shadow"></span>
         </fieldset>
 
-        <div class="form__checkbox-group">
-          <input type="checkbox" id="terms" name="terms" value="terms" />
-          <label for="terms">I agree to the Terms and Conditions provided</label>
-          <span data-name="terms" class="form__error-span">test</span>
+
+        <div class="form__checkbox-group u-margin-top">
+          <input clss="form__checkbox-input" type="checkbox" id="terms" name="terms" value="terms" />
+          <label clss="form__checkbox-label" for="terms">I agree to the Terms and Conditions provided</label>
+          <span data-name="terms" class="form__error-span u-text-shadow"></span>
         </div>
-        <button class="btn" type="submit">Submit</button>
+        <div class="form__btn u-margin-top">
+          <button class="btn" type="submit">Submit</button>
+        </div>
+        
       </form>
     </div>
 
